@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default function DashboardPage() {
-	const isAuthenticated = false; // Dahsboard is only for authenticated users
+	const isAuthenticated = true; // Dahsboard is only for authenticated users
 
 	let children = <Login />;
 
