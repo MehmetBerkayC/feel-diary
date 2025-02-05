@@ -1,5 +1,6 @@
 import { Fugaz_One } from "next/font/google";
 import React from "react";
+import Calendar from "./Calendar";
 
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
 
@@ -57,7 +58,7 @@ export default function Dashboard() {
 						return (
 							<button
 								className={
-									"p-4 rounded-2xl purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-100 flex flex-col gap-2 text-center items-center flex-1"
+									"p-3 rounded-2xl purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-100 flex flex-col gap-2 text-center items-center flex-1"
 								}
 								key={moodIndex}
 							>
@@ -66,7 +67,8 @@ export default function Dashboard() {
 								</p>
 								<p
 									className={
-										"text-indigo-500 " + fugaz.className
+										"text-indigo-500 text-xs sm:text-sm md:text-base " +
+										fugaz.className
 									}
 								>
 									{mood}
@@ -75,6 +77,7 @@ export default function Dashboard() {
 						);
 					})}
 				</div>
+				<Calendar />
 			</div>
 		</>
 	);
