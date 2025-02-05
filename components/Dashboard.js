@@ -52,15 +52,12 @@ export default function Dashboard() {
 				>
 					How do you <span className="textGradient">feel</span> today?
 				</h4>
-				<div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+				<div className="flex items-stretch flex-wrap gap-4">
 					{Object.keys(moods).map((mood, moodIndex) => {
 						return (
 							<button
 								className={
-									"p-4 rounded-2xl purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-100 flex flex-col gap-2 text-center items-center " +
-									(moodIndex === 4
-										? " col-span-2 sm:col-span-1"
-										: "")
+									"p-4 rounded-2xl purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-100 flex flex-col gap-2 text-center items-center flex-1"
 								}
 								key={moodIndex}
 							>
