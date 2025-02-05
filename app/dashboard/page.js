@@ -1,11 +1,19 @@
+import Dashboard from "@/components/Dashboard";
+import Login from "@/components/Login";
+import Main from "@/components/Main";
+
 export const metadata = {
 	title: "FeelDiary - Dashboard",
 };
 
 export default function DashboardPage() {
-	return (
-		<div>
-			<h1>Dashboard Page</h1>
-		</div>
-	);
+	const isAuthenticated = false; // Dahsboard is only for authenticated users
+
+	let children = <Login />;
+
+	if (isAuthenticated) {
+		children = <Dashboard />;
+	}
+
+	return <Main>{children}</Main>;
 }
