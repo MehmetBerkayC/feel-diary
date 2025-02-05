@@ -32,6 +32,9 @@ export default function RootLayout({ children }) {
 			>
 				FeelDiary
 			</h1>
+			<div className="flex items-center justify-between">
+				PLACEHOLDER - Call to Action Button || Stats
+			</div>
 		</header>
 	);
 
