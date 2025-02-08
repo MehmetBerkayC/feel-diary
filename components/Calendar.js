@@ -1,4 +1,5 @@
 import React from "react";
+import { gradients, baseRating, demoData } from "@/utils";
 
 // Placeholder data
 const months = {
@@ -27,7 +28,10 @@ const dayList = [
 ];
 const now = new Date();
 
-export default function Calendar() {
+export default function Calendar(props) {
+	const { demo } = props;
+
+	// Generate gradient background
 	// 1.35
 
 	// Current date placeholder data
@@ -49,12 +53,26 @@ export default function Calendar() {
 	const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0); //Add rows for each week
 
 	// console.log("Num rows:" + numRows);
+	const data = {
+		15: 2,
+		16: 4,
+		17: 1,
+		18: 3,
+		19: 5,
+		20: 2,
+		21: 3,
+		22: 4,
+		23: 1,
+		24: 2,
+		25: 3,
+	};
 
+	// Generate calendar days
 	return (
-		<div className="flex flex-col overflow-hidden gap-1">
+		<div className="flex flex-col overflow-hidden gap-1 py-4 sm:py-6 md:py-10">
 			{[...Array(numRows).keys()].map((row, rowIndex) => {
 				return (
-					<div key={rowIndex}>
+					<div key={rowIndex} className="grid grid-cols-7 gap-1">
 						{dayList.map((dayOfWeek, dayOfWeekIndex) => {
 							let dayIndex =
 								rowIndex * 7 +
@@ -80,7 +98,30 @@ export default function Calendar() {
 								);
 							}
 
-							return <div key={dayOfWeekIndex}>Day</div>;
+							// Data is mood numbers in days, demo is fake data
+							let color = demo
+								? gradients.indigo[baseRating[dayIndex]]
+								: dayIndex in data
+								? gradients.indigo[data[dayIndex]]
+								: "white";
+
+							return (
+								<div
+									style={{ background: color }} // dynamic style support
+									key={dayOfWeekIndex}
+									className={
+										"text-xs sm:text-sm border border-solid p-2 flex items-center gap-2 justify-between rounded-lg" +
+										(isToday
+											? " border-indigo-400 "
+											: " border-indigo-100 ") +
+										(color === "white"
+											? " text-indigo-400 "
+											: " text-white ")
+									}
+								>
+									<p>{dayIndex}</p>
+								</div>
+							);
 						})}
 					</div>
 				);
