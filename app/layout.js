@@ -1,6 +1,7 @@
 import { Fugaz_One, Open_Sans, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -48,19 +49,22 @@ export default function RootLayout({ children }) {
 			</p>
 		</footer>
 	);
+
 	return (
 		<html lang="en">
-			<body
-				className={
-					"w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-800" +
-					`${geistSans.variable} ${geistMono.variable} antialiased ` +
-					openSans.className
-				}
-			>
-				{header}
-				{children}
-				{footer}
-			</body>
+			<AuthProvider>
+				<body
+					className={
+						"w-full max-w-[1000px] mx-auto text-sm sm:text-base min-h-screen flex flex-col text-slate-800" +
+						`${geistSans.variable} ${geistMono.variable} antialiased ` +
+						openSans.className
+					}
+				>
+					{header}
+					{children}
+					{footer}
+				</body>
+			</AuthProvider>
 		</html>
 	);
 }
