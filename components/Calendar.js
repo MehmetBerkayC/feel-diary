@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { gradients, baseRating, demoData } from "@/utils";
+import Loading from "./Loading";
 
 // Placeholder data
 const months = {
@@ -27,10 +28,9 @@ const dayList = [
 	"Friday",
 	"Saturday",
 ];
-const now = new Date();
 
 export default function Calendar(props) {
-	const { demo, data, handleSetMood } = props;
+	const { demo, completeData, handleSetMood } = props;
 
 	const now = new Date();
 	const currentMonth = now.getMonth();
@@ -42,6 +42,13 @@ export default function Calendar(props) {
 	const [selectedYear, setSelectedYear] = useState(now.getFullYear());
 
 	// console.log("Selected month: " + selectedMonth + "\n" + "Selected year: " + selectedYear);
+
+	const numericMonth = Object.keys(months).indexOf(selectedMonth);
+	const data = completeData?.[selectedYear]?.[numericMonth] || {};
+	// console.log(
+	// 	"This months data: ",
+	// 	completeData?.[selectedYear]?.[numericMonth]
+	// );
 
 	function handleIncrementMonth(value) {
 		// value = +1 / -1
@@ -55,7 +62,9 @@ export default function Calendar(props) {
 		Object.keys(months).indexOf(selectedMonth),
 		1
 	);
+
 	const firstDayOfMonth = monthNow.getDay();
+
 	const daysInMonth = new Date(
 		selectedYear,
 		Object.keys(months).indexOf(selectedMonth) + 1, // get the next month
@@ -68,6 +77,8 @@ export default function Calendar(props) {
 	const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0); //Add rows for each week
 
 	// console.log("Num rows:" + numRows);
+
+	// Data might not be available
 
 	// Generate calendar days
 	return (

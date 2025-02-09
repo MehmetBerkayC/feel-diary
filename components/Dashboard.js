@@ -14,22 +14,16 @@ export default function Dashboard() {
 	const { currentUser, userDataObj, setUserDataObj, loading } = useAuth();
 	const [data, setData] = useState({});
 
-	function countValues() {
-		let count = 0;
-		Object.values(data).forEach((entry) => {
-			count += entry.feelings.length;
-		});
-		return count;
-	}
+	function countValues() {}
 
 	async function handleSetMood(mood) {
 		const now = new Date();
-		const day = now.getDay();
+		const day = now.getDate();
 		const month = now.getMonth();
 		const year = now.getFullYear();
 
 		try {
-			const newData = { ...userDataObj };
+			const newData = { ...userDataObj }; // copy data
 			// If the data doesn't exist make it
 			if (!newData?.[year]) {
 				newData[year] = {};
@@ -41,10 +35,13 @@ export default function Dashboard() {
 
 			newData[year][month][day] = mood;
 
+			console.log(newData);
+
 			// update the current state,
 			setData(newData);
 			// update the global state,
 			setUserDataObj(newData);
+
 			// update the firebase,
 			const docRef = doc(db, "users", currentUser.uid);
 			const res = await setDoc(
@@ -134,6 +131,7 @@ export default function Dashboard() {
 						return (
 							<button
 								onClick={() => {
+									// moods start from 0 - because index
 									const currentMoodValue = moodIndex + 1;
 									handleSetMood(currentMoodValue);
 								}}
@@ -157,7 +155,7 @@ export default function Dashboard() {
 						);
 					})}
 				</div>
-				<Calendar data={data} handleSetMood={handleSetMood} />
+				<Calendar completeData={data} handleSetMood={handleSetMood} />
 			</div>
 		</>
 	);

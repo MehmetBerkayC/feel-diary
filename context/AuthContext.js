@@ -1,5 +1,5 @@
 "use client";
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
 import {
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,
@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
 	const [userDataObj, setUserDataObj] = useState(null);
 	const [loading, setLoading] = useState(true); // for first time render
 
-	function signUp(email, password) {
+	function signup(email, password) {
 		return createUserWithEmailAndPassword(auth, email, password);
 	}
 
@@ -60,7 +60,7 @@ export function AuthProvider({ children }) {
 					console.log(firebaseData);
 				}
 
-				setUserDataObj(firebaseData);
+				setUserDataObj(firebaseData || {}); // Ensure it's always an object
 			} catch (error) {
 				console.log(error.message);
 			} finally {
@@ -73,7 +73,7 @@ export function AuthProvider({ children }) {
 	// special syntax, value and the key is the same thats why i don't write currentUser: currentUser etc.
 	const value = {
 		currentUser,
-		signUp,
+		signup,
 		login,
 		logout,
 		userDataObj,

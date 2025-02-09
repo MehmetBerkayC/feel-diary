@@ -2,6 +2,7 @@ import { Fugaz_One, Open_Sans, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { AuthProvider } from "@/context/AuthContext";
+import Head from "./head";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -52,6 +53,7 @@ export default function RootLayout({ children }) {
 
 	return (
 		<html lang="en">
+			<Head />
 			<AuthProvider>
 				<body
 					className={
