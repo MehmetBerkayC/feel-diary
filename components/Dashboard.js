@@ -5,11 +5,13 @@ import Calendar from "./Calendar";
 import { useAuth } from "@/context/AuthContext";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
+import Loading from "./Loading";
+import Login from "./Login";
 
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
 
 export default function Dashboard() {
-	const { currentUser, userDataObj, setUserDataObj } = useAuth();
+	const { currentUser, userDataObj, setUserDataObj, loading } = useAuth();
 	const [data, setData] = useState({});
 
 	function countValues() {
@@ -20,7 +22,12 @@ export default function Dashboard() {
 		return count;
 	}
 
-	async function handleSetMood(mood, day, month, year) {
+	async function handleSetMood(mood) {
+		const now = new Date();
+		const day = now.getDay();
+		const month = now.getMonth();
+		const year = now.getFullYear();
+
 		try {
 			const newData = { ...userDataObj };
 			// If the data doesn't exist make it
@@ -79,6 +86,16 @@ export default function Dashboard() {
 		setData(userDataObj);
 	}, [currentUser, userDataObj]); // check whenever these have new values and run the useEffect
 
+	// Dahsboard is only for authenticated users
+	if (!currentUser) {
+		return <Login />;
+	}
+
+	// Show loading screen
+	if (loading) {
+		return <Loading />;
+	}
+
 	return (
 		<>
 			<div className="flex flex-col flex-1 gap-8 sm:gap-12 md:gap-16">
@@ -116,6 +133,10 @@ export default function Dashboard() {
 					{Object.keys(moods).map((mood, moodIndex) => {
 						return (
 							<button
+								onClick={() => {
+									const currentMoodValue = moodIndex + 1;
+									handleSetMood(currentMoodValue);
+								}}
 								className={
 									"p-3 rounded-2xl purpleShadow duration-200 bg-indigo-50 hover:bg-indigo-100 flex flex-col gap-2 text-center items-center flex-1"
 								}

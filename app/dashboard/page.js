@@ -1,4 +1,5 @@
 import Dashboard from "@/components/Dashboard";
+import Loading from "@/components/Loading";
 import Login from "@/components/Login";
 import Main from "@/components/Main";
 
@@ -7,13 +8,9 @@ export const metadata = {
 };
 
 export default function DashboardPage() {
-	const isAuthenticated = true; // Dahsboard is only for authenticated users
-
-	let children = <Login />;
-
-	if (isAuthenticated) {
-		children = <Dashboard />;
-	}
-
-	return <Main>{children}</Main>;
+	return (
+		<Main>
+			<Dashboard />
+		</Main>
+	);
 }
