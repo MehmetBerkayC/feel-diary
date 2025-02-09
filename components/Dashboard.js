@@ -1,10 +1,60 @@
+"use client";
 import { Fugaz_One } from "next/font/google";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "./Calendar";
+import { useAuth } from "@/context/AuthContext";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 const fugaz = Fugaz_One({ subsets: ["latin"], weight: ["400"] });
 
 export default function Dashboard() {
+	const { currentUser, userDataObj, setUserDataObj } = useAuth();
+	const [data, setData] = useState({});
+
+	function countValues() {
+		let count = 0;
+		Object.values(data).forEach((entry) => {
+			count += entry.feelings.length;
+		});
+		return count;
+	}
+
+	async function handleSetMood(mood, day, month, year) {
+		try {
+			const newData = { ...userDataObj };
+			// If the data doesn't exist make it
+			if (!newData?.[year]) {
+				newData[year] = {};
+			}
+
+			if (!newData?.[year]?.[month]) {
+				newData[year][month] = {};
+			}
+
+			newData[year][month][day] = mood;
+
+			// update the current state,
+			setData(newData);
+			// update the global state,
+			setUserDataObj(newData);
+			// update the firebase,
+			const docRef = doc(db, "users", currentUser.uid);
+			const res = await setDoc(
+				docRef,
+				{
+					[year]: {
+						[month]: {
+							[day]: mood,
+						},
+					},
+				},
+				{ merge: true } // add on to the previous data don't overwrite
+			);
+		} catch (error) {
+			console.log("Failed to set data:", error.message);
+		}
+	}
 	// 1.13 m
 	const statuses = {
 		num_days: 14,
@@ -19,6 +69,15 @@ export default function Dashboard() {
 		Good: "🙂",
 		Excellent: "😊",
 	};
+
+	useEffect(() => {
+		if (!currentUser && !userDataObj) {
+			console.log("No user or data found."); // not logged in
+			return;
+		}
+
+		setData(userDataObj);
+	}, [currentUser, userDataObj]); // check whenever these have new values and run the useEffect
 
 	return (
 		<>
@@ -77,7 +136,7 @@ export default function Dashboard() {
 						);
 					})}
 				</div>
-				<Calendar />
+				<Calendar data={data} handleSetMood={handleSetMood} />
 			</div>
 		</>
 	);

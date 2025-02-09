@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { gradients, baseRating, demoData } from "@/utils";
 
 // Placeholder data
@@ -29,21 +30,35 @@ const dayList = [
 const now = new Date();
 
 export default function Calendar(props) {
-	const { demo } = props;
+	const { demo, data, handleSetMood } = props;
 
+	const now = new Date();
+	const currentMonth = now.getMonth();
+
+	const [selectedMonth, setSelectedMonth] = useState(
+		Object.keys(months)[currentMonth]
+	);
+
+	const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+
+	// console.log("Selected month: " + selectedMonth + "\n" + "Selected year: " + selectedYear);
+
+	function handleIncrementMonth(value) {
+		// value = +1 / -1
+		// if we hit the bounds of the months, adjust the year displayed
+	}
 	// Generate gradient background
-	// 1.35
-
-	// Current date placeholder data
-	const year = 2024;
-	const month = "July";
 
 	//  Year-Month-Day format
-	const monthNow = new Date(year, Object.keys(months).indexOf(month), 1);
+	const monthNow = new Date(
+		selectedYear,
+		Object.keys(months).indexOf(selectedMonth),
+		1
+	);
 	const firstDayOfMonth = monthNow.getDay();
 	const daysInMonth = new Date(
-		year,
-		Object.keys(months).indexOf(month) + 1, // get the next month
+		selectedYear,
+		Object.keys(months).indexOf(selectedMonth) + 1, // get the next month
 		0 // last day of the last month
 	).getDate(); // Just gets the last day of the current month to find day count of the current month
 
@@ -53,19 +68,6 @@ export default function Calendar(props) {
 	const numRows = Math.floor(daysToDisplay / 7) + (daysToDisplay % 7 ? 1 : 0); //Add rows for each week
 
 	// console.log("Num rows:" + numRows);
-	const data = {
-		15: 2,
-		16: 4,
-		17: 1,
-		18: 3,
-		19: 5,
-		20: 2,
-		21: 3,
-		22: 4,
-		23: 1,
-		24: 2,
-		25: 3,
-	};
 
 	// Generate calendar days
 	return (

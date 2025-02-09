@@ -18,7 +18,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
 	const [currentUser, setCurrentUser] = useState(null);
-	const [userDataObj, setUserDataObj] = useState({});
+	const [userDataObj, setUserDataObj] = useState(null);
 	const [loading, setLoading] = useState(true); // for first time render
 
 	function signUp(email, password) {
@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
 
 	function logout() {
 		// reset user states
-		setUserDataObj({});
+		setUserDataObj(null);
 		setCurrentUser(null);
 
 		return signOut(auth);
@@ -77,6 +77,7 @@ export function AuthProvider({ children }) {
 		login,
 		logout,
 		userDataObj,
+		setUserDataObj,
 		loading,
 	};
 
