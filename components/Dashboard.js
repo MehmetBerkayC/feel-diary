@@ -14,10 +14,50 @@ export default function Dashboard() {
 	const { currentUser, userDataObj, setUserDataObj, loading } = useAuth();
 	const [data, setData] = useState({});
 
-	function countValues() {}
+	const now = new Date();
+
+	function countValues() {
+		let totalNumberOfDays = 0;
+		let sumMoods = 0;
+
+		for (let year in data) {
+			for (let month in data[year]) {
+				for (let day in data[year][month]) {
+					let daysMood = data[year][month][day];
+					totalNumberOfDays++;
+					sumMoods += daysMood;
+				}
+			}
+		}
+
+		return {
+			num_days: totalNumberOfDays,
+			average_mood: sumMoods / totalNumberOfDays,
+		};
+	}
+
+	const statuses = {
+		...countValues(), // same as using {num_days, average_mood} = countValues(), spreads the return values
+		time_remaining: `${23 - now.getHours()}H ${60 - now.getMinutes()}M`,
+	};
+
+	// Could've used v
+	// const count = countValues();
+	// const statuses = {
+	//     num_days: count.num_days,
+	//     average_mood: count.average_mood,
+	//     time_remaining: `${23 - now.getHours()}H ${60 - now.getMinutes()}M`,
+	// };
+
+	const moods = {
+		"&*@$%?": "😭",
+		Sad: "😞",
+		Neutral: "😐",
+		Good: "🙂",
+		Excellent: "😊",
+	};
 
 	async function handleSetMood(mood) {
-		const now = new Date();
 		const day = now.getDate();
 		const month = now.getMonth();
 		const year = now.getFullYear();
@@ -59,20 +99,6 @@ export default function Dashboard() {
 			console.log("Failed to set data:", error.message);
 		}
 	}
-	// 1.13 m
-	const statuses = {
-		num_days: 14,
-		time_remaining: "13:14:25",
-		date: new Date().toDateString(),
-	};
-
-	const moods = {
-		"&*@$%?": "😭",
-		Sad: "😞",
-		Neutral: "😐",
-		Good: "🙂",
-		Excellent: "😊",
-	};
 
 	useEffect(() => {
 		if (!currentUser && !userDataObj) {
@@ -103,7 +129,7 @@ export default function Dashboard() {
 								key={statusIndex}
 								className=" flex flex-col gap-1 sm:gap-2"
 							>
-								<p className="font-medium uppercase text-xs md:text-sm truncate">
+								<p className="font-medium capitalize text-xs md:text-sm truncate">
 									{status.replace("_", " ")}
 								</p>
 								<p
@@ -113,6 +139,7 @@ export default function Dashboard() {
 									}
 								>
 									{statuses[status]}
+									{status === "num_days" ? " 🔥" : ""}
 								</p>
 							</div>
 						);
