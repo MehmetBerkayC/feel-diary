@@ -5,4 +5,4 @@ Used:
 - Next 15
 - Firebase (Authentication and Data Storage)
 - Netlify (Site Deployment)
-To see the finished project -> feeldiary.netlify.app
+To see the finished project -> [FeelDiary](https://feeldiary.netlify.app)
